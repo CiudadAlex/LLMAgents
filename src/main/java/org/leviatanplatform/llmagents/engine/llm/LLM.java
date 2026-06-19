@@ -1,6 +1,7 @@
 package org.leviatanplatform.llmagents.engine.llm;
 
 import org.leviatanplatform.llmagents.engine.parent.TextCallable;
+import org.leviatanplatform.llmagents.engine.util.TicToc;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -23,9 +24,14 @@ public class LLM implements TextCallable {
     @Override
     public String call(String inputText) throws IOException {
 
+        TicToc ticToc = new TicToc("Call to LLM");
+
         String[] arrayCommand = new String[] {"docker", "model", "run", this.model, inputText};
         Process process = Runtime.getRuntime().exec(arrayCommand);
         byte[] processOutput = getOutputBytesProcess(process);
+
+        ticToc.toc();
+
         return new String(processOutput);
     }
 

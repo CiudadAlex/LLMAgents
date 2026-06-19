@@ -18,7 +18,11 @@ class JsonListAgentTest {
         List<NameAndDescription> response = jsonListAgent.callAndRetrieveList(inputText);
 
         System.out.println("#########################################################");
-        System.out.println(response);
+
+        for (NameAndDescription item : response) {
+            System.out.println(item);
+        }
+
         System.out.println("#########################################################");
     }
 }
