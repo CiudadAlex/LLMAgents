@@ -1,4 +1,4 @@
-package org.leviatanplatform.llmagents;
+package org.leviatanplatform.llmagents.engine.llm;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;

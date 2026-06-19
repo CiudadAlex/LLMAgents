@@ -1,4 +1,6 @@
-package org.leviatanplatform.llmagents;
+package org.leviatanplatform.llmagents.engine.llm;
+
+import org.leviatanplatform.llmagents.engine.llm.LLM;
 
 import java.io.IOException;
 
