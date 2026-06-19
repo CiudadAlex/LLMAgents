@@ -31,8 +31,11 @@ public class LLM {
         InputStream is = process.getInputStream();
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
 
-        while (is.available() > 0) {
-            baos.write(is.read());
+        while (process.isAlive()) {
+
+            if (is.available() > 0) {
+                baos.write(is.read());
+            }
         }
 
         return baos.toByteArray();
