@@ -3,11 +3,16 @@ package org.leviatanplatform.llmagents;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.OutputStream;
 
 public class LLM {
 
+    private static final String DEFAULT_MODEL = "ai/llama3.1:8B-Q4_K_M";
+
     private final String model;
+
+    public LLM() {
+        this(DEFAULT_MODEL);
+    }
 
     public LLM(String model) {
         this.model = model;
@@ -33,29 +38,3 @@ public class LLM {
         return baos.toByteArray();
     }
 }
-
-
-/*
-"""
-Caller for an LLM. Example call:
-
-docker model run ai/llama3.1:8B-Q4_K_M "what is a black hole"
-"""
-
-
-class LLM:
-
-    def __init__(self, model="ai/llama3.1:8B-Q4_K_M"):
-        self.model = model
-
-    def execute(self, text):
-        # Execute command and capture output
-        result = subprocess.run(
-            ['docker', 'model', 'run', self.model, text],
-            capture_output=True,
-            text=True,
-            encoding='utf-8'
-        )
-
-        return result.stdout
-*/
