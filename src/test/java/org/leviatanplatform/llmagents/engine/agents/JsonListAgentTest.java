@@ -1,6 +1,9 @@
 package org.leviatanplatform.llmagents.engine.agents;
 
+import org.leviatanplatform.llmagents.engine.domain.NameAndDescription;
+
 import java.io.IOException;
+import java.util.List;
 
 class JsonListAgentTest {
 
@@ -12,7 +15,7 @@ class JsonListAgentTest {
 
     private static void askAndPrintResponse(JsonListAgent jsonListAgent, String inputText) throws IOException {
 
-        String response = jsonListAgent.call(inputText);
+        List<NameAndDescription> response = jsonListAgent.callAndRetrieveList(inputText);
 
         System.out.println("#########################################################");
         System.out.println(response);

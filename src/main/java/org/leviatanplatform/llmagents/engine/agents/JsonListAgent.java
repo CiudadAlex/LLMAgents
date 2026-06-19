@@ -2,6 +2,7 @@ package org.leviatanplatform.llmagents.engine.agents;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.leviatanplatform.llmagents.engine.config.Constants;
 import org.leviatanplatform.llmagents.engine.domain.NameAndDescription;
 
 import java.io.IOException;
@@ -18,6 +19,12 @@ public class JsonListAgent extends AbstractAgent {
     public List<NameAndDescription> callAndRetrieveList(String inputText) throws IOException {
 
         String json = super.call(inputText);
+
+        if (Constants.DEBUG) {
+            System.out.println("-------------------");
+            System.out.println(json);
+            System.out.println("-------------------");
+        }
 
         ObjectMapper mapper = new ObjectMapper();
 
