@@ -10,7 +10,7 @@ class JsonListAgentTest {
     public static void main(String[] args) throws IOException {
 
         JsonListAgent jsonListAgent = new JsonListAgent();
-        askAndPrintResponse(jsonListAgent,"create a list of interesting topics about physics");
+        askAndPrintResponse(jsonListAgent,"interesting topics about physics");
     }
 
     private static void askAndPrintResponse(JsonListAgent jsonListAgent, String inputText) throws IOException {
