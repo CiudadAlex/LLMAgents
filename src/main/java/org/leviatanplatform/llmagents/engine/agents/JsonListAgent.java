@@ -1,5 +1,7 @@
 package org.leviatanplatform.llmagents.engine.agents;
 
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.leviatanplatform.llmagents.engine.domain.NameAndDescription;
 
 import java.io.IOException;
@@ -15,9 +17,16 @@ public class JsonListAgent extends AbstractAgent {
 
     public List<NameAndDescription> callAndRetrieveList(String inputText) throws IOException {
 
-        String response = super.call(inputText);
+        String json = super.call(inputText);
+
+        ObjectMapper mapper = new ObjectMapper();
+
+        List<NameAndDescription> list = mapper.readValue(
+                json,
+                new TypeReference<List<NameAndDescription>>() {}
+        );
 
         // FIXME acabar
-        return null;
+        return list;
     }
 }
