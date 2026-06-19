@@ -1,10 +1,12 @@
 package org.leviatanplatform.llmagents.engine.llm;
 
+import org.leviatanplatform.llmagents.engine.parent.TextCallable;
+
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 
-public class LLM {
+public class LLM implements TextCallable {
 
     private static final String DEFAULT_MODEL = "ai/llama3.1:8B-Q4_K_M";
 
@@ -18,6 +20,7 @@ public class LLM {
         this.model = model;
     }
 
+    @Override
     public String call(String inputText) throws IOException {
 
         String[] arrayCommand = new String[] {"docker", "model", "run", this.model, inputText};
