@@ -4,12 +4,11 @@ import java.util.List;
 
 public class HierarchyNode<T> {
 
-    private T node;
+    private final T node;
     private List<HierarchyNode<T>> children;
 
-    public HierarchyNode(T node, List<HierarchyNode<T>> children) {
+    public HierarchyNode(T node) {
         this.node = node;
-        this.children = children;
     }
 
     public T getNode() {
@@ -18,5 +17,9 @@ public class HierarchyNode<T> {
 
     public List<HierarchyNode<T>> getChildren() {
         return children;
+    }
+
+    public void setChildren(List<HierarchyNode<T>> children) {
+        this.children = children;
     }
 }

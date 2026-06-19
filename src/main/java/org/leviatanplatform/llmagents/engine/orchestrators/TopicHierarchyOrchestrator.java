@@ -5,6 +5,7 @@ import org.leviatanplatform.llmagents.engine.domain.HierarchyNode;
 import org.leviatanplatform.llmagents.engine.domain.NameAndDescription;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
 public class TopicHierarchyOrchestrator {
@@ -21,14 +22,32 @@ public class TopicHierarchyOrchestrator {
 
     public HierarchyNode<NameAndDescription> getHierarchyConcepts(String concept, int layers) throws IOException {
 
-        List<NameAndDescription> listNameAndDescription = jsonListAgent.callAndRetrieveList(concept);
-        // FIXME acabar
-        return null;
+        NameAndDescription nodeRoot = new NameAndDescription(concept, concept);
+        HierarchyNode<NameAndDescription> hierarchyRoot = new HierarchyNode<>(nodeRoot);
+
+        fillChildren(hierarchyRoot);
+
+        List<HierarchyNode<NameAndDescription>> currentChildren = hierarchyRoot.getChildren();
+
+        for (int i = 0; i < layers - 1; i++) {
+
+            List<HierarchyNode<NameAndDescription>> nextChildren = new ArrayList<>();
+
+            for (HierarchyNode<NameAndDescription> child : currentChildren) {
+                fillChildren(child);
+                nextChildren.addAll(child.getChildren());
+            }
+
+            currentChildren = nextChildren;
+        }
+
+        return hierarchyRoot;
     }
 
     public void fillChildren(HierarchyNode<NameAndDescription> hierarchyNode) throws IOException {
 
-        // List<NameAndDescription> listNameAndDescription = jsonListAgent.callAndRetrieveList(concept);
-        // FIXME acabar
+        List<NameAndDescription> listNameAndDescription = jsonListAgent.callAndRetrieveList(hierarchyNode.getNode().getName());
+        List<HierarchyNode<NameAndDescription>> children = listNameAndDescription.stream().map(HierarchyNode::new).toList();
+        hierarchyNode.setChildren(children);
     }
 }

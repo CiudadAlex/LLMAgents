@@ -10,7 +10,7 @@ class TopicHierarchyOrchestratorTest {
     public static void main(String[] args) throws IOException {
 
         TopicHierarchyOrchestrator topicHierarchyOrchestrator = new TopicHierarchyOrchestrator();
-        askAndPrintResponse(topicHierarchyOrchestrator,"create a list of interesting topics about physics");
+        askAndPrintResponse(topicHierarchyOrchestrator,"interesting topics about physics");
     }
 
     private static void askAndPrintResponse(TopicHierarchyOrchestrator topicHierarchyOrchestrator, String inputText) throws IOException {
