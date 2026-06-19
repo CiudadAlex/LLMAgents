@@ -16,6 +16,10 @@ public class JsonListAgent extends AbstractAgent {
         super(CONTEXT);
     }
 
+    public JsonListAgent(String model) {
+        super(model, CONTEXT);
+    }
+
     public List<NameAndDescription> callAndRetrieveList(String inputText) throws IOException {
 
         String json = super.call(inputText);
