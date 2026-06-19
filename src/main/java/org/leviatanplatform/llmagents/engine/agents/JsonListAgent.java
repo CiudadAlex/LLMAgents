@@ -10,7 +10,7 @@ import java.util.List;
 
 public class JsonListAgent extends AbstractAgent {
 
-    private static final String CONTEXT = "Your responses are ALWAYS a JSON with a list of objects with the field 'name' and the field 'description'. The response must only be the JSON";
+    private static final String CONTEXT = "Your responses are ALWAYS a JSON with a list of objects with the field 'name' and the field 'description'. The response must only be the JSON. The list should be about ";
 
     public JsonListAgent() {
         super(CONTEXT);

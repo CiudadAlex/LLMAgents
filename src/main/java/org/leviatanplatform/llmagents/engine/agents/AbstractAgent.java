@@ -25,7 +25,7 @@ public abstract class AbstractAgent implements TextCallable {
 
     @Override
     public String call(String inputText) throws IOException {
-        return llm.call(context + ".\n" + inputText);
+        return llm.call(context + " " + inputText);
     }
 
 }
