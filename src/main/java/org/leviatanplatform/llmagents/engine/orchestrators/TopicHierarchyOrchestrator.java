@@ -19,10 +19,16 @@ public class TopicHierarchyOrchestrator {
         this.jsonListAgent = new JsonListAgent(model);
     }
 
-    public HierarchyNode<NameAndDescription> getHierarchyConcepts(String concept) throws IOException {
+    public HierarchyNode<NameAndDescription> getHierarchyConcepts(String concept, int layers) throws IOException {
 
         List<NameAndDescription> listNameAndDescription = jsonListAgent.callAndRetrieveList(concept);
         // FIXME acabar
         return null;
+    }
+
+    public void fillChildren(HierarchyNode<NameAndDescription> hierarchyNode) throws IOException {
+
+        // List<NameAndDescription> listNameAndDescription = jsonListAgent.callAndRetrieveList(concept);
+        // FIXME acabar
     }
 }

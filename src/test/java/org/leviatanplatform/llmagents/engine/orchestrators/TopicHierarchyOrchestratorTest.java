@@ -15,7 +15,8 @@ class TopicHierarchyOrchestratorTest {
 
     private static void askAndPrintResponse(TopicHierarchyOrchestrator topicHierarchyOrchestrator, String inputText) throws IOException {
 
-        HierarchyNode<NameAndDescription> hierarchyNode = topicHierarchyOrchestrator.getHierarchyConcepts(inputText);
+        int layers = 2;
+        HierarchyNode<NameAndDescription> hierarchyNode = topicHierarchyOrchestrator.getHierarchyConcepts(inputText, layers);
 
         System.out.println("#########################################################");
 
