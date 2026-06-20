@@ -23,6 +23,43 @@ public class WerewolfGameOrchestrator {
 
     // FIXME finish
 
+    private Integer getAgentIndexKilledByPeople(List<AbstractAgent> listRemainingAgents) throws IOException {
+
+        String excusesDocument = generateExcusesDocument(listRemainingAgents);
+
+        for (AbstractAgent agent : listRemainingAgents) {
+
+        }
+    }
+
+    private Integer getAgentIndexVotedByPeasant(String excusesDocument, PeasantAgent peasantAgent, List<AbstractAgent> listRemainingAgents) throws IOException {
+
+        String strIndex = peasantAgent.call(excusesDocument + ". Which number of person do you think is a werewolf? You MUST answer only the number");
+
+        try {
+            int index = Integer.parseInt(strIndex);
+            listRemainingAgents.get(index);
+            return index;
+
+        } catch (Exception e) {
+            // Nothing to do
+        }
+
+        return null;
+    }
+
+    private Integer getAgentIndexVotedByWerewolf(WerewolfAgent werewolfAgent, List<AbstractAgent> listRemainingAgents) {
+
+        for (int i = 0; i < listRemainingAgents.size(); i++) {
+            AbstractAgent agent = listRemainingAgents.get(i);
+            if (agent instanceof PeasantAgent) {
+                return i;
+            }
+        }
+
+        return null;
+    }
+
     private String generateExcusesDocument(List<AbstractAgent> listRemainingAgents) throws IOException {
 
         StringBuilder sb = new StringBuilder();
