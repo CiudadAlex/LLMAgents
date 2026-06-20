@@ -15,7 +15,7 @@ class TopicHierarchyOrchestratorTest {
 
     private static void askAndPrintResponse(TopicHierarchyOrchestrator topicHierarchyOrchestrator, String inputText) throws IOException {
 
-        int layers = 2;
+        int layers = 3;
         HierarchyNode<NameAndDescription> hierarchyNode = topicHierarchyOrchestrator.getHierarchyConcepts(inputText, layers);
 
         System.out.println("#########################################################");
@@ -27,7 +27,12 @@ class TopicHierarchyOrchestratorTest {
             System.out.println(item.getNode());
 
             for (HierarchyNode<NameAndDescription> subItem : item.getChildren()) {
+
                 System.out.println(subItem.getNode().toString(2));
+
+                for (HierarchyNode<NameAndDescription> subSubItem : subItem.getChildren()) {
+                    System.out.println(subSubItem.getNode().toString(4));
+                }
             }
 
             System.out.println("-----------------------");
