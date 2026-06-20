@@ -25,6 +25,9 @@ public class BrokenPhoneOrchestrator {
 
         for (AbstractAgent agent : listAgents) {
             currentText = agent.call("Tell me with your own words the following text: '" + currentText + "'");
+            System.out.println("--------------------");
+            System.out.println(currentText);
+            System.out.println("--------------------");
         }
 
         return currentText;
