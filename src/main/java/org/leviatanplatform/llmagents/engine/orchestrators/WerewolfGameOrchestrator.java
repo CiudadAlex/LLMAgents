@@ -26,10 +26,41 @@ public class WerewolfGameOrchestrator {
     private Integer getAgentIndexKilledByPeople(List<AbstractAgent> listRemainingAgents) throws IOException {
 
         String excusesDocument = generateExcusesDocument(listRemainingAgents);
+        int[] arrayVotes = new int[listRemainingAgents.size()];
 
         for (AbstractAgent agent : listRemainingAgents) {
 
+            Integer vote = null;
+
+            if (agent instanceof PeasantAgent peasantAgent) {
+                vote = getAgentIndexVotedByPeasant(excusesDocument, peasantAgent, listRemainingAgents);
+
+            } else if (agent instanceof WerewolfAgent werewolfAgent) {
+                vote = getAgentIndexVotedByWerewolf(werewolfAgent, listRemainingAgents);
+            }
+
+            arrayVotes[vote]++;
         }
+
+        return getMaxIndex(arrayVotes);
+    }
+
+    private int getMaxIndex(int[] array) {
+
+        int max = Integer.MIN_VALUE;
+        int indexOfMax = -1;
+
+        for (int i = 0; i < array.length; i++) {
+
+            int value = array[i];
+
+            if (value > max) {
+                max = value;
+                indexOfMax = i;
+            }
+        }
+
+        return indexOfMax;
     }
 
     private Integer getAgentIndexVotedByPeasant(String excusesDocument, PeasantAgent peasantAgent, List<AbstractAgent> listRemainingAgents) throws IOException {
