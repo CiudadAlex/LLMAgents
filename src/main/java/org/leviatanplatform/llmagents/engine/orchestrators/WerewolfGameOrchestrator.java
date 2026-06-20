@@ -21,7 +21,39 @@ public class WerewolfGameOrchestrator {
                 new PeasantAgent(model), new PeasantAgent(model), new WerewolfAgent(model), new PeasantAgent(model));
     }
 
+    public void executeGame() throws IOException {
+
+        Integer indexToKillAll = getAgentIndexKilledByPeople(listAgents);
+        listAgents.remove(indexToKillAll.intValue());
+
+        Integer indexToKillWerewolf = getAgentIndexVotedByWerewolf(listAgents);
+        listAgents.remove(indexToKillWerewolf.intValue());
+    }
+
     // FIXME finish
+    private boolean areThereAnyPeasants(List<AbstractAgent> listRemainingAgents) {
+
+        for (AbstractAgent agent : listRemainingAgents) {
+
+            if (agent instanceof PeasantAgent) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    private boolean areThereAnyWerewolves(List<AbstractAgent> listRemainingAgents) {
+
+        for (AbstractAgent agent : listRemainingAgents) {
+
+            if (agent instanceof WerewolfAgent) {
+                return true;
+            }
+        }
+
+        return false;
+    }
 
     private Integer getAgentIndexKilledByPeople(List<AbstractAgent> listRemainingAgents) throws IOException {
 
@@ -35,8 +67,8 @@ public class WerewolfGameOrchestrator {
             if (agent instanceof PeasantAgent peasantAgent) {
                 vote = getAgentIndexVotedByPeasant(excusesDocument, peasantAgent, listRemainingAgents);
 
-            } else if (agent instanceof WerewolfAgent werewolfAgent) {
-                vote = getAgentIndexVotedByWerewolf(werewolfAgent, listRemainingAgents);
+            } else if (agent instanceof WerewolfAgent) {
+                vote = getAgentIndexVotedByWerewolf(listRemainingAgents);
             }
 
             arrayVotes[vote]++;
@@ -79,7 +111,7 @@ public class WerewolfGameOrchestrator {
         return null;
     }
 
-    private Integer getAgentIndexVotedByWerewolf(WerewolfAgent werewolfAgent, List<AbstractAgent> listRemainingAgents) {
+    private Integer getAgentIndexVotedByWerewolf(List<AbstractAgent> listRemainingAgents) {
 
         for (int i = 0; i < listRemainingAgents.size(); i++) {
             AbstractAgent agent = listRemainingAgents.get(i);
