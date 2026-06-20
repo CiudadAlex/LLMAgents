@@ -55,7 +55,7 @@ public class WerewolfGameOrchestrator {
         AbstractAgent killed = listRemainingAgents.remove(indexToKill.intValue());
 
         String who = peopleOrWerewolves ? "People" : "Werewolves";
-        System.out.println(who + " kills " + killed.getClass().getSimpleName());
+        log(who + " kills " + killed.getClass().getSimpleName());
     }
 
     private boolean isThereAWinner(List<AbstractAgent> listRemainingAgents) {
@@ -89,6 +89,8 @@ public class WerewolfGameOrchestrator {
     private Integer getAgentIndexKilledByPeople(List<AbstractAgent> listRemainingAgents) throws IOException {
 
         String excusesDocument = generateExcusesDocument(listRemainingAgents);
+        log("Excuses Document", excusesDocument);
+
         int[] arrayVotes = new int[listRemainingAgents.size()];
 
         for (AbstractAgent agent : listRemainingAgents) {
@@ -129,6 +131,7 @@ public class WerewolfGameOrchestrator {
     private Integer getAgentIndexVotedByPeasant(String excusesDocument, PeasantAgent peasantAgent, List<AbstractAgent> listRemainingAgents) throws IOException {
 
         String strIndex = peasantAgent.call(excusesDocument + ". Which number of person do you think is a werewolf? You MUST answer only the number");
+        log("Index of agent to kill by people: " + strIndex);
 
         try {
             int index = Integer.parseInt(strIndex);
@@ -166,5 +169,18 @@ public class WerewolfGameOrchestrator {
         }
 
         return sb.toString();
+    }
+
+    private void log(String title, String text) {
+
+        log("#########################");
+        log(title);
+        log("-------------");
+        log(text);
+        log("#########################");
+    }
+
+    private void log(String text) {
+        System.out.println(text);
     }
 }
