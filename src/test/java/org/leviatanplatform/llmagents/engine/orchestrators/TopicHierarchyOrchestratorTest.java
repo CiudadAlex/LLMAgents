@@ -27,7 +27,7 @@ class TopicHierarchyOrchestratorTest {
             System.out.println(item.getNode());
 
             for (HierarchyNode<NameAndDescription> subItem : item.getChildren()) {
-                System.out.println("          " + subItem.getNode());
+                System.out.println(subItem.getNode().toString(2));
             }
 
             System.out.println("-----------------------");
