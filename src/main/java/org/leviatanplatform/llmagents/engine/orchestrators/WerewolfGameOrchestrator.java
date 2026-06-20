@@ -21,16 +21,40 @@ public class WerewolfGameOrchestrator {
                 new PeasantAgent(model), new PeasantAgent(model), new WerewolfAgent(model), new PeasantAgent(model));
     }
 
-    public void executeGame() throws IOException {
+    // FIXME finish
 
-        Integer indexToKillAll = getAgentIndexKilledByPeople(listAgents);
-        listAgents.remove(indexToKillAll.intValue());
+    public String executeGame() throws IOException {
 
-        Integer indexToKillWerewolf = getAgentIndexVotedByWerewolf(listAgents);
-        listAgents.remove(indexToKillWerewolf.intValue());
+        boolean peopleOrWerewolves = true;
+
+        while (true) {
+
+            executeTurn(listAgents, peopleOrWerewolves);
+
+            if (isThereAWinner(listAgents)) {
+                return listAgents.get(0).getClass().getSimpleName();
+            }
+
+            peopleOrWerewolves = !peopleOrWerewolves;
+        }
     }
 
-    // FIXME finish
+    public void executeTurn(List<AbstractAgent> listRemainingAgents, boolean peopleOrWerewolves) throws IOException {
+
+        if (peopleOrWerewolves) {
+            Integer indexToKillAll = getAgentIndexKilledByPeople(listRemainingAgents);
+            listRemainingAgents.remove(indexToKillAll.intValue());
+
+        } else {
+            Integer indexToKillWerewolf = getAgentIndexVotedByWerewolf(listRemainingAgents);
+            listRemainingAgents.remove(indexToKillWerewolf.intValue());
+        }
+    }
+
+    private boolean isThereAWinner(List<AbstractAgent> listRemainingAgents) {
+        return !areThereAnyPeasants(listRemainingAgents) || !areThereAnyWerewolves(listRemainingAgents);
+    }
+
     private boolean areThereAnyPeasants(List<AbstractAgent> listRemainingAgents) {
 
         for (AbstractAgent agent : listRemainingAgents) {
