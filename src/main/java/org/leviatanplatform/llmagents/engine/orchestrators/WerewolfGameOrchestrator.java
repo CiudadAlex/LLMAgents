@@ -39,14 +39,23 @@ public class WerewolfGameOrchestrator {
 
     public void executeTurn(List<AbstractAgent> listRemainingAgents, boolean peopleOrWerewolves) throws IOException {
 
-        if (peopleOrWerewolves) {
-            Integer indexToKillAll = getAgentIndexKilledByPeople(listRemainingAgents);
-            listRemainingAgents.remove(indexToKillAll.intValue());
+        Integer indexToKill;
 
+        if (peopleOrWerewolves) {
+            indexToKill = getAgentIndexKilledByPeople(listRemainingAgents);
         } else {
-            Integer indexToKillWerewolf = getAgentIndexVotedByWerewolf(listRemainingAgents);
-            listRemainingAgents.remove(indexToKillWerewolf.intValue());
+            indexToKill = getAgentIndexVotedByWerewolf(listRemainingAgents);
         }
+
+        kill(peopleOrWerewolves, listRemainingAgents, indexToKill);
+    }
+
+    private void kill(boolean peopleOrWerewolves, List<AbstractAgent> listRemainingAgents, Integer indexToKill) {
+
+        AbstractAgent killed = listRemainingAgents.remove(indexToKill.intValue());
+
+        String who = peopleOrWerewolves ? "People" : "Werewolves";
+        System.out.println(who + " kills " + killed.getClass().getSimpleName());
     }
 
     private boolean isThereAWinner(List<AbstractAgent> listRemainingAgents) {
