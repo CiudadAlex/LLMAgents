@@ -2,6 +2,7 @@ package org.leviatanplatform.llmagents.engine.orchestrators;
 
 import org.leviatanplatform.llmagents.engine.agents.*;
 
+import java.io.IOException;
 import java.util.List;
 
 public class BrokenPhoneOrchestrator {
@@ -18,6 +19,14 @@ public class BrokenPhoneOrchestrator {
                 new DumbAgent(model), new LittleKidAgent(model), new SoftwareEngineerAgent(model), new TeacherAgent(model));
     }
 
-    // FIXME finish
+    public String execute(String inputText) throws IOException {
 
+        String currentText = inputText;
+
+        for (AbstractAgent agent : listAgents) {
+            currentText = agent.call("Tell me with your own words the following text: '" + currentText + "'");
+        }
+
+        return currentText;
+    }
 }

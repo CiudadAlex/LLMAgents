@@ -13,6 +13,11 @@ class BrokenPhoneOrchestratorTest {
     }
 
     private static void askAndPrintResponse(BrokenPhoneOrchestrator brokenPhoneOrchestrator, String inputText) throws IOException {
-        // FIXME finish
+        String response = brokenPhoneOrchestrator.execute(inputText);
+        System.out.println("#########################################################");
+        System.out.println(inputText);
+        System.out.println("#########################################################");
+        System.out.println(response);
+        System.out.println("#########################################################");
     }
 }
