@@ -21,8 +21,6 @@ public class WerewolfGameOrchestrator {
                 new PeasantAgent(model), new PeasantAgent(model), new WerewolfAgent(model), new PeasantAgent(model));
     }
 
-    // FIXME finish
-
     public String executeGame() throws IOException {
 
         boolean peopleOrWerewolves = true;
