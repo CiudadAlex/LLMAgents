@@ -44,6 +44,6 @@ public class NameAndDescription {
 
         String tabulations = sb.toString();
 
-        return tabulations + "name: " + name + "\n" + tabulations + "description: " + description;
+        return tabulations + "- name: " + name + "\n" + tabulations + "  description: " + description;
     }
 }

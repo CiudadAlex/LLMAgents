@@ -32,12 +32,16 @@ public class JsonListAgent extends AbstractAgent {
 
         ObjectMapper mapper = new ObjectMapper();
 
-        List<NameAndDescription> list = mapper.readValue(
-                json,
-                new TypeReference<List<NameAndDescription>>() {}
-        );
+        try {
+            List<NameAndDescription> list = mapper.readValue(json, new TypeReference<List<NameAndDescription>>() {});
+            return list;
 
-        // FIXME acabar
-        return list;
+        } catch (IOException ioe) {
+
+            System.out.println("-------------------");
+            System.out.println(json);
+            System.out.println("-------------------");
+            throw ioe;
+        }
     }
 }
