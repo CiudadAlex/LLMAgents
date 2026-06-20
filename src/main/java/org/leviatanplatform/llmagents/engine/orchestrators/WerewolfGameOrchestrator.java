@@ -7,7 +7,7 @@ import java.util.List;
 
 public class WerewolfGameOrchestrator {
 
-    private static final String EXCUSE_PROMPT = "you have to convince me that you are not a werewolf";
+    private static final String EXCUSE_PROMPT = "you have to convince me that you are not a werewolf. Keep the explanation short";
 
     private List<AbstractAgent> listAgents;
 
@@ -130,19 +130,22 @@ public class WerewolfGameOrchestrator {
 
     private Integer getAgentIndexVotedByPeasant(String excusesDocument, PeasantAgent peasantAgent, List<AbstractAgent> listRemainingAgents) throws IOException {
 
-        String strIndex = peasantAgent.call(excusesDocument + ". Which number of person do you think is a werewolf? You MUST answer only the number");
-        log("Index of agent to kill by people: " + strIndex);
+        while (true) {
 
-        try {
-            int index = Integer.parseInt(strIndex);
-            listRemainingAgents.get(index);
-            return index;
+            try {
 
-        } catch (Exception e) {
-            // Nothing to do
+                String strIndex = peasantAgent.call("These are the comments of the people in this town. You have to tell me which number of person do you think is a werewolf?" +
+                        " You MUST answer only the number. These are their comments:\n" + excusesDocument);
+                log("Index of agent to kill by peasant: " + strIndex);
+
+                int index = Integer.parseInt(strIndex);
+                listRemainingAgents.get(index);
+                return index;
+
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
         }
-
-        return null;
     }
 
     private Integer getAgentIndexVotedByWerewolf(List<AbstractAgent> listRemainingAgents) {
