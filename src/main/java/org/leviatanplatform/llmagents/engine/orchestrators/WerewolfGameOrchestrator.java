@@ -156,11 +156,14 @@ public class WerewolfGameOrchestrator {
     private Float getProbabilityOfWerewolf(String excuse, PeasantAgent peasantAgent) {
 
         String strProbRaw = "";
+        int count = -1;
 
         while (true) {
 
+            count++;
+
             try {
-                String prompt = "What is the probability that a werewolf says \"" + excuse + "\"? Answer just with the probability";
+                String prompt = generatePromptAskForProbabilityOfWerewolf(excuse, count);
                 strProbRaw = peasantAgent.call(prompt);
                 Float probability = extractProbability(strProbRaw);
 
@@ -178,6 +181,21 @@ public class WerewolfGameOrchestrator {
                     e.printStackTrace();
                 }
             }
+        }
+    }
+
+    private String generatePromptAskForProbabilityOfWerewolf(String excuse, int count) {
+
+        int mod = count % 3;
+
+        if (mod == 0) {
+            return "What is the probability that a werewolf says \"" + excuse + "\"? Answer just with the probability";
+
+        } else if (mod == 1) {
+            return "if someone says: \"" + excuse + "\", What is the probability that it is a werewolf? Answer just with the probability";
+
+        } else {
+            return "What is the probability that a bad person says \"" + excuse + "\"? Answer just with the probability";
         }
     }
 
