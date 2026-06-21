@@ -162,12 +162,7 @@ public class WerewolfGameOrchestrator {
             count++;
 
             try {
-                String prompt = generatePromptAskForProbabilityOfWerewolf(excuseGenerator.getExcuse(), count);
-
-                if (prompt == null) {
-                    // If no probability, it will be interpreted as abstention
-                    return null;
-                }
+                String prompt = generatePromptAskForProbabilityOfWerewolf(excuseGenerator, count);
 
                 strProbRaw = peasantAgent.call(prompt);
                 Float probability = extractProbability(strProbRaw);
@@ -189,19 +184,21 @@ public class WerewolfGameOrchestrator {
         }
     }
 
-    private String generatePromptAskForProbabilityOfWerewolf(String excuse, int count) {
+    private String generatePromptAskForProbabilityOfWerewolf(ExcuseGenerator excuseGenerator, int count) throws IOException {
 
-        if (count == 0) {
+        int mod = count % 3;
+        String excuse = excuseGenerator.getExcuse();
+
+        if (mod == 0) {
             return "What is the probability that a werewolf says \" " + excuse + " \" ? Answer just with the probability";
 
-        } else if (count == 1) {
+        } else if (mod == 1) {
             return "if someone says: \" " + excuse + " \" , What is the probability that it is a werewolf? Answer just with the probability";
 
-        } else if (count == 2) {
+        } else {
+            excuseGenerator.askForExcuse();
             return "What is the probability that a bad person says \" " + excuse + " \" ? Answer just with the probability";
 
-        } else {
-            return null;
         }
     }
 
@@ -269,7 +266,7 @@ public class WerewolfGameOrchestrator {
 
     private void log(String title, List<String> texts) {
 
-        String text = String.join("***\n\n", texts);
+        String text = String.join("\n\n", texts);
         log(title, text);
     }
 

@@ -16,7 +16,7 @@ public class ExcuseGenerator {
         askForExcuse();
     }
 
-    private void askForExcuse() throws IOException {
+    public void askForExcuse() throws IOException {
         excuse = agent.call(EXCUSE_PROMPT);
         excuse = excuse.replace("\"", "");
         excuse = excuse.replace("\n", "");
