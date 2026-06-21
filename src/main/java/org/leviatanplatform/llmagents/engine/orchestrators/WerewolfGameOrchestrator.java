@@ -189,13 +189,13 @@ public class WerewolfGameOrchestrator {
         int mod = count % 3;
 
         if (mod == 0) {
-            return "What is the probability that a werewolf says \"" + excuse + "\"? Answer just with the probability";
+            return "What is the probability that a werewolf says \" " + excuse + " \" ? Answer just with the probability";
 
         } else if (mod == 1) {
-            return "if someone says: \"" + excuse + "\", What is the probability that it is a werewolf? Answer just with the probability";
+            return "if someone says: \" " + excuse + " \" , What is the probability that it is a werewolf? Answer just with the probability";
 
         } else {
-            return "What is the probability that a bad person says \"" + excuse + "\"? Answer just with the probability";
+            return "What is the probability that a bad person says \" " + excuse + " \" ? Answer just with the probability";
         }
     }
 

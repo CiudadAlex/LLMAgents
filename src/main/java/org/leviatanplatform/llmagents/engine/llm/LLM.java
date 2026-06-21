@@ -22,9 +22,11 @@ public class LLM implements TextCallable {
     }
 
     @Override
-    public String call(String inputText) throws IOException {
+    public String call(String inputTextRaw) throws IOException {
 
         TicToc ticToc = new TicToc("Call to LLM");
+
+        String inputText = inputTextRaw.replace("\"", "\"\"");
 
         String[] arrayCommand = new String[] {"docker", "model", "run", this.model, inputText};
         Process process = Runtime.getRuntime().exec(arrayCommand);
