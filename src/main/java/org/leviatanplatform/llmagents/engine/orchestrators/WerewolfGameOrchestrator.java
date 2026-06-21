@@ -4,6 +4,7 @@ import org.leviatanplatform.llmagents.engine.agents.*;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 public class WerewolfGameOrchestrator {
@@ -13,12 +14,12 @@ public class WerewolfGameOrchestrator {
     private List<AbstractAgent> listAgents;
 
     public WerewolfGameOrchestrator() {
-        this.listAgents = List.of(new PeasantAgent(), new PeasantAgent(), new WerewolfAgent(),
+        this.listAgents = Arrays.asList(new PeasantAgent(), new PeasantAgent(), new WerewolfAgent(),
                 new PeasantAgent(), new PeasantAgent(), new WerewolfAgent(), new PeasantAgent(), new PeasantAgent());
     }
 
     public WerewolfGameOrchestrator(String model) {
-        this.listAgents = List.of(new PeasantAgent(model), new PeasantAgent(model), new WerewolfAgent(model),
+        this.listAgents = Arrays.asList(new PeasantAgent(model), new PeasantAgent(model), new WerewolfAgent(model),
                 new PeasantAgent(model), new PeasantAgent(model), new WerewolfAgent(model), new PeasantAgent(model), new PeasantAgent(model));
     }
 
@@ -148,31 +149,59 @@ public class WerewolfGameOrchestrator {
         return indexOfMax;
     }
 
-    private Float getProbabilityOfWerewolf(String excuse, PeasantAgent peasantAgent) throws IOException {
+    private Float getProbabilityOfWerewolf(String excuse, PeasantAgent peasantAgent) {
+
+        String strProbRaw = "";
 
         while (true) {
 
             try {
 
                 String prompt = "what is the probability that a werewolf says '" + excuse + "'? Answer just with the probability";
-                String strProbRaw = peasantAgent.call(prompt);
-                int indexOfPercent = strProbRaw.indexOf("%");
+                strProbRaw = peasantAgent.call(prompt);
+                Float probability = extractProbability(strProbRaw);
 
-                if (indexOfPercent == -1) {
+                if (probability == null) {
                     continue;
                 }
 
-                String strProb = strProbRaw.trim().substring(0, indexOfPercent);
-
-                log("Probability of agent to be a werewolf: " + strProb);
-
-                float probability = Float.parseFloat(strProb);
+                log("Probability of agent to be a werewolf: " + probability);
                 return probability;
 
             } catch (Exception e) {
+                log("ERROR parsing probability: " + strProbRaw);
                 e.printStackTrace();
             }
         }
+    }
+
+    private Float extractProbability(String strProbRaw) {
+
+        Float probability = extractProbability(strProbRaw, "%");
+
+        if (probability != null) {
+            return probability;
+        }
+
+        probability = extractProbability(strProbRaw, " ");
+
+        if (probability != null) {
+            return probability;
+        }
+
+        return null;
+    }
+
+    private Float extractProbability(String strProbRaw, String end) {
+
+        int indexOfEnd = strProbRaw.indexOf(end);
+
+        if (indexOfEnd != -1) {
+            String strProb = strProbRaw.trim().substring(0, indexOfEnd);
+            return Float.parseFloat(strProb);
+        }
+
+        return null;
     }
 
     private Integer getAgentIndexVotedByWerewolf(List<AbstractAgent> listRemainingAgents) {
