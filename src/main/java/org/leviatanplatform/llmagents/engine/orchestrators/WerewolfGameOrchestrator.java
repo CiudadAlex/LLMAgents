@@ -2,14 +2,13 @@ package org.leviatanplatform.llmagents.engine.orchestrators;
 
 import org.leviatanplatform.llmagents.engine.agents.*;
 import org.leviatanplatform.llmagents.engine.config.Constants;
+import org.leviatanplatform.llmagents.engine.domain.ExcuseGenerator;
 
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
 public class WerewolfGameOrchestrator {
-
-    private static final String EXCUSE_PROMPT = "you have to convince me in just one sentence that you are not a werewolf. Keep the explanation VERY short";
 
     private List<AbstractAgent> listAgents;
 
@@ -94,8 +93,8 @@ public class WerewolfGameOrchestrator {
 
     private Integer getAgentIndexKilledByPeople(List<AbstractAgent> listRemainingAgents) throws IOException {
 
-        List<String> listExcuses = generateExcuses(listRemainingAgents);
-        log("Excuses Document", listExcuses);
+        List<ExcuseGenerator> listExcuseGenerator = generateExcuseGenerators(listRemainingAgents);
+        log("Excuses Document", listExcuseGenerator.stream().map(ExcuseGenerator::getExcuse).toList());
 
         int[] arrayVotes = new int[listRemainingAgents.size()];
 
@@ -104,7 +103,7 @@ public class WerewolfGameOrchestrator {
             Integer vote = null;
 
             if (agent instanceof PeasantAgent peasantAgent) {
-                vote = getAgentIndexVotedByPeasant(listExcuses, peasantAgent);
+                vote = getAgentIndexVotedByPeasant(listExcuseGenerator, peasantAgent);
 
             } else if (agent instanceof WerewolfAgent) {
                 vote = getAgentIndexVotedByWerewolf(listRemainingAgents);
@@ -134,15 +133,15 @@ public class WerewolfGameOrchestrator {
         return indexOfMax;
     }
 
-    private Integer getAgentIndexVotedByPeasant(List<String> listExcuses, PeasantAgent peasantAgent) throws IOException {
+    private Integer getAgentIndexVotedByPeasant(List<ExcuseGenerator> listExcuseGenerator, PeasantAgent peasantAgent) throws IOException {
 
         float max = Float.NEGATIVE_INFINITY;
         int indexOfMax = -1;
 
-        for (int i = 0; i < listExcuses.size(); i++) {
+        for (int i = 0; i < listExcuseGenerator.size(); i++) {
 
-            String excuse = listExcuses.get(0);
-            Float probability = getProbabilityOfWerewolf(excuse, peasantAgent);
+            ExcuseGenerator excuseGenerator = listExcuseGenerator.get(i);
+            Float probability = getProbabilityOfWerewolf(excuseGenerator, peasantAgent);
 
             if (probability > max) {
                 max = probability;
@@ -153,7 +152,7 @@ public class WerewolfGameOrchestrator {
         return indexOfMax;
     }
 
-    private Float getProbabilityOfWerewolf(String excuse, PeasantAgent peasantAgent) {
+    private Float getProbabilityOfWerewolf(ExcuseGenerator excuseGenerator, PeasantAgent peasantAgent) {
 
         String strProbRaw = "";
         int count = -1;
@@ -163,7 +162,7 @@ public class WerewolfGameOrchestrator {
             count++;
 
             try {
-                String prompt = generatePromptAskForProbabilityOfWerewolf(excuse, count);
+                String prompt = generatePromptAskForProbabilityOfWerewolf(excuseGenerator.getExcuse(), count);
 
                 if (prompt == null) {
                     // If no probability, it will be interpreted as abstention
@@ -255,20 +254,17 @@ public class WerewolfGameOrchestrator {
         return null;
     }
 
-    private List<String> generateExcuses(List<AbstractAgent> listRemainingAgents) throws IOException {
+    private List<ExcuseGenerator> generateExcuseGenerators(List<AbstractAgent> listRemainingAgents) throws IOException {
 
-        List<String> listExcuses = new ArrayList<>();
+        List<ExcuseGenerator> listExcuseGenerator = new ArrayList<>();
 
         for (AbstractAgent agent : listRemainingAgents) {
 
-            String excuse = agent.call(EXCUSE_PROMPT);
-
-            excuse = excuse.replace("\"", "");
-            excuse = excuse.replace("\n", "");
-            listExcuses.add(excuse);
+            ExcuseGenerator excuseGenerator = new ExcuseGenerator(agent);
+            listExcuseGenerator.add(excuseGenerator);
         }
 
-        return listExcuses;
+        return listExcuseGenerator;
     }
 
     private void log(String title, List<String> texts) {
