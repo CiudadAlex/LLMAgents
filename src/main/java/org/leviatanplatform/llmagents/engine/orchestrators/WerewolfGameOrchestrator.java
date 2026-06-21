@@ -154,13 +154,17 @@ public class WerewolfGameOrchestrator {
 
             try {
 
-                String prompt = "This is are the comment of a person in this town: " +
-                        "\"" + excuse + "\"." +
-                        " Which is the probability of the person being a werewolf?";
-                String strProb = peasantAgent.call(prompt);
-                log("Probability of agent to be a werewolf: " + strProb);
+                String prompt = "what is the probability that a werewolf says '" + excuse + "'? Answer just with the probability";
+                String strProbRaw = peasantAgent.call(prompt);
+                int indexOfPercent = strProbRaw.indexOf("%");
 
-                // FIXME does not return the probability
+                if (indexOfPercent == -1) {
+                    continue;
+                }
+
+                String strProb = strProbRaw.trim().substring(0, indexOfPercent);
+
+                log("Probability of agent to be a werewolf: " + strProb);
 
                 float probability = Float.parseFloat(strProb);
                 return probability;
