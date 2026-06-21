@@ -153,7 +153,7 @@ public class WerewolfGameOrchestrator {
         return indexOfMax;
     }
 
-    private Float getProbabilityOfWerewolf(String excuse, PeasantAgent peasantAgent) {
+    private Float getProbabilityOfWerewolf(String excuseRaw, PeasantAgent peasantAgent) {
 
         String strProbRaw = "";
 
@@ -161,7 +161,8 @@ public class WerewolfGameOrchestrator {
 
             try {
 
-                String prompt = "what is the probability that a werewolf says '" + excuse + "'? Answer just with the probability";
+                String excuse = excuseRaw.replace("\"", "");
+                String prompt = "What is the probability that a werewolf says \"" + excuse + "\"? Answer just with the probability";
                 strProbRaw = peasantAgent.call(prompt);
                 Float probability = extractProbability(strProbRaw);
 
