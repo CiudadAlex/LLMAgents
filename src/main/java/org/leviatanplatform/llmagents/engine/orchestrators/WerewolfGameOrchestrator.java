@@ -3,6 +3,7 @@ package org.leviatanplatform.llmagents.engine.orchestrators;
 import org.leviatanplatform.llmagents.engine.agents.*;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
 public class WerewolfGameOrchestrator {
@@ -88,8 +89,8 @@ public class WerewolfGameOrchestrator {
 
     private Integer getAgentIndexKilledByPeople(List<AbstractAgent> listRemainingAgents) throws IOException {
 
-        String excusesDocument = generateExcusesDocument(listRemainingAgents);
-        log("Excuses Document", excusesDocument);
+        List<String> listExcuses = generateExcuses(listRemainingAgents);
+        log("Excuses Document", listExcuses);
 
         int[] arrayVotes = new int[listRemainingAgents.size()];
 
@@ -98,7 +99,7 @@ public class WerewolfGameOrchestrator {
             Integer vote = null;
 
             if (agent instanceof PeasantAgent peasantAgent) {
-                vote = getAgentIndexVotedByPeasant(excusesDocument, peasantAgent, listRemainingAgents);
+                vote = getAgentIndexVotedByPeasant(listExcuses, peasantAgent);
 
             } else if (agent instanceof WerewolfAgent) {
                 vote = getAgentIndexVotedByWerewolf(listRemainingAgents);
@@ -128,19 +129,41 @@ public class WerewolfGameOrchestrator {
         return indexOfMax;
     }
 
-    private Integer getAgentIndexVotedByPeasant(String excusesDocument, PeasantAgent peasantAgent, List<AbstractAgent> listRemainingAgents) throws IOException {
+    private Integer getAgentIndexVotedByPeasant(List<String> listExcuses, PeasantAgent peasantAgent) throws IOException {
+
+        float max = Float.MIN_VALUE;
+        int indexOfMax = -1;
+
+        for (int i = 0; i < listExcuses.size(); i++) {
+
+            String excuse = listExcuses.get(0);
+            Float probability = getProbabilityOfWerewolf(excuse, peasantAgent);
+
+            if (probability > max) {
+                max = probability;
+                indexOfMax = i;
+            }
+        }
+
+        return indexOfMax;
+    }
+
+    private Float getProbabilityOfWerewolf(String excuse, PeasantAgent peasantAgent) throws IOException {
 
         while (true) {
 
             try {
 
-                String strIndex = peasantAgent.call("These are the comments of the people in this town. You have to tell me which number of person do you think is a werewolf?" +
-                        " You MUST answer only the number. These are their comments:\n" + excusesDocument);
-                log("Index of agent to kill by peasant: " + strIndex);
+                String prompt = "This is are the comment of a person in this town: " +
+                        "\"" + excuse + "\"." +
+                        " Which is the probability of the person being a werewolf?";
+                String strProb = peasantAgent.call(prompt);
+                log("Probability of agent to be a werewolf: " + strProb);
 
-                int index = Integer.parseInt(strIndex);
-                listRemainingAgents.get(index);
-                return index;
+                // FIXME does not return the probability
+
+                float probability = Float.parseFloat(strProb);
+                return probability;
 
             } catch (Exception e) {
                 e.printStackTrace();
@@ -160,18 +183,22 @@ public class WerewolfGameOrchestrator {
         return null;
     }
 
-    private String generateExcusesDocument(List<AbstractAgent> listRemainingAgents) throws IOException {
+    private List<String> generateExcuses(List<AbstractAgent> listRemainingAgents) throws IOException {
 
-        StringBuilder sb = new StringBuilder();
-        int count = 0;
+        List<String> listExcuses = new ArrayList<>();
 
         for (AbstractAgent agent : listRemainingAgents) {
             String excuse = agent.call(EXCUSE_PROMPT);
-            sb.append("The person ").append(count).append(" says:\n").append(excuse).append("\n");
-            count++;
+            listExcuses.add(excuse);
         }
 
-        return sb.toString();
+        return listExcuses;
+    }
+
+    private void log(String title, List<String> texts) {
+
+        String text = String.join("***\n\n", texts);
+        log(title, text);
     }
 
     private void log(String title, String text) {
