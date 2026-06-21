@@ -1,10 +1,10 @@
 package org.leviatanplatform.llmagents.engine.orchestrators;
 
 import org.leviatanplatform.llmagents.engine.agents.*;
+import org.leviatanplatform.llmagents.engine.config.Constants;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 public class WerewolfGameOrchestrator {
@@ -173,8 +173,11 @@ public class WerewolfGameOrchestrator {
                 return probability;
 
             } catch (Exception e) {
-                log("ERROR parsing probability: " + strProbRaw);
-                e.printStackTrace();
+
+                if (Constants.DEBUG) {
+                    log("ERROR parsing probability: " + strProbRaw);
+                    e.printStackTrace();
+                }
             }
         }
     }
