@@ -136,7 +136,7 @@ public class WerewolfGameOrchestrator {
 
     private Integer getAgentIndexVotedByPeasant(List<String> listExcuses, PeasantAgent peasantAgent) throws IOException {
 
-        float max = Float.MIN_VALUE;
+        float max = Float.NEGATIVE_INFINITY;
         int indexOfMax = -1;
 
         for (int i = 0; i < listExcuses.size(); i++) {
