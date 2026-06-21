@@ -14,13 +14,17 @@ public class WerewolfGameOrchestrator {
     private List<AbstractAgent> listAgents;
 
     public WerewolfGameOrchestrator() {
-        this.listAgents = Arrays.asList(new PeasantAgent(), new PeasantAgent(), new WerewolfAgent(),
+        this.listAgents = list(new PeasantAgent(), new PeasantAgent(), new WerewolfAgent(),
                 new PeasantAgent(), new PeasantAgent(), new WerewolfAgent(), new PeasantAgent(), new PeasantAgent());
     }
 
     public WerewolfGameOrchestrator(String model) {
-        this.listAgents = Arrays.asList(new PeasantAgent(model), new PeasantAgent(model), new WerewolfAgent(model),
+        this.listAgents = list(new PeasantAgent(model), new PeasantAgent(model), new WerewolfAgent(model),
                 new PeasantAgent(model), new PeasantAgent(model), new WerewolfAgent(model), new PeasantAgent(model), new PeasantAgent(model));
+    }
+
+    public static List<AbstractAgent> list(AbstractAgent... arrayAgents) {
+        return new ArrayList<>(List.of(arrayAgents));
     }
 
     public String executeGame() throws IOException {
@@ -177,13 +181,20 @@ public class WerewolfGameOrchestrator {
 
     private Float extractProbability(String strProbRaw) {
 
-        Float probability = extractProbability(strProbRaw, "%");
+        String strProb = strProbRaw.toLowerCase().trim().replace("zero", "0");
+        int lastIndexOfAsterisk = strProb.lastIndexOf("*");
+
+        if (lastIndexOfAsterisk != -1) {
+            strProb = strProb.substring(lastIndexOfAsterisk).trim();
+        }
+
+        Float probability = extractProbability(strProb, "%");
 
         if (probability != null) {
             return probability;
         }
 
-        probability = extractProbability(strProbRaw, " ");
+        probability = extractProbability(strProb, " ");
 
         if (probability != null) {
             return probability;
@@ -197,7 +208,7 @@ public class WerewolfGameOrchestrator {
         int indexOfEnd = strProbRaw.indexOf(end);
 
         if (indexOfEnd != -1) {
-            String strProb = strProbRaw.trim().substring(0, indexOfEnd);
+            String strProb = strProbRaw.substring(0, indexOfEnd);
             return Float.parseFloat(strProb);
         }
 
