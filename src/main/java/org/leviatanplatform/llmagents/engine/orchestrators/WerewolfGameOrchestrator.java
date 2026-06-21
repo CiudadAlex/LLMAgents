@@ -9,7 +9,7 @@ import java.util.List;
 
 public class WerewolfGameOrchestrator {
 
-    private static final String EXCUSE_PROMPT = "you have to convince me that you are not a werewolf. Keep the explanation short";
+    private static final String EXCUSE_PROMPT = "you have to convince me that you are not a werewolf. Keep the explanation VERY short";
 
     private List<AbstractAgent> listAgents;
 
