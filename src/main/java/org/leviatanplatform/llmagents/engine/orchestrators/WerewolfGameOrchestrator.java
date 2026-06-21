@@ -9,7 +9,7 @@ import java.util.List;
 
 public class WerewolfGameOrchestrator {
 
-    private static final String EXCUSE_PROMPT = "you have to convince me that you are not a werewolf. Keep the explanation VERY short";
+    private static final String EXCUSE_PROMPT = "you have to convince me in just one sentence that you are not a werewolf. Keep the explanation VERY short";
 
     private List<AbstractAgent> listAgents;
 
@@ -164,6 +164,12 @@ public class WerewolfGameOrchestrator {
 
             try {
                 String prompt = generatePromptAskForProbabilityOfWerewolf(excuse, count);
+
+                if (prompt == null) {
+                    // If no probability, it will be interpreted as abstention
+                    return null;
+                }
+
                 strProbRaw = peasantAgent.call(prompt);
                 Float probability = extractProbability(strProbRaw);
 
@@ -186,16 +192,17 @@ public class WerewolfGameOrchestrator {
 
     private String generatePromptAskForProbabilityOfWerewolf(String excuse, int count) {
 
-        int mod = count % 3;
-
-        if (mod == 0) {
+        if (count == 0) {
             return "What is the probability that a werewolf says \" " + excuse + " \" ? Answer just with the probability";
 
-        } else if (mod == 1) {
+        } else if (count == 1) {
             return "if someone says: \" " + excuse + " \" , What is the probability that it is a werewolf? Answer just with the probability";
 
-        } else {
+        } else if (count == 2) {
             return "What is the probability that a bad person says \" " + excuse + " \" ? Answer just with the probability";
+
+        } else {
+            return null;
         }
     }
 
@@ -220,6 +227,7 @@ public class WerewolfGameOrchestrator {
             return probability;
         }
 
+        // If no probability, it will be interpreted as abstention
         return null;
     }
 
