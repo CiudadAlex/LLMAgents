@@ -185,7 +185,7 @@ public class WerewolfGameOrchestrator {
         int lastIndexOfAsterisk = strProb.lastIndexOf("*");
 
         if (lastIndexOfAsterisk != -1) {
-            strProb = strProb.substring(lastIndexOfAsterisk).trim();
+            strProb = strProb.substring(lastIndexOfAsterisk + 1).trim();
         }
 
         Float probability = extractProbability(strProb, "%");
