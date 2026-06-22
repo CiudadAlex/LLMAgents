@@ -20,6 +20,7 @@ public class ExcuseGenerator {
         excuse = agent.call(EXCUSE_PROMPT);
         excuse = excuse.replace("\"", "");
         excuse = excuse.replace("\n", "");
+        System.out.println("excuse = " + excuse);
     }
 
     public String getExcuse() {

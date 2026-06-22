@@ -12,6 +12,4 @@ class WerewolfGameOrchestratorTest {
 
         System.out.println("WINNER!!!!! " + winner);
     }
-
-    // FIXME finish
 }
